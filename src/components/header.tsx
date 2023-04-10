@@ -55,7 +55,7 @@ interface HeaderSimpleProps {
   links: { link: string; label: string, icon: React.FC<any> }[];
 }
 
-export function HeaderSimple() {
+export default function HeaderCustom() {
   const links = [
     {
       "link": "/todos",
@@ -77,6 +77,7 @@ export function HeaderSimple() {
 
   const items = links.map((link) => (
     <Link
+      key={link.link}
       href={link.link}
       className={cx(classes.link, { [classes.linkActive]: active === link.link })}
       onClick={(event) => {
@@ -94,7 +95,7 @@ export function HeaderSimple() {
     return null;
   } else {
     return (
-      <Header height={60} mb={120}>
+      <Header height={60} mb={40}>
         <Container className={classes.header}>
           <UserButton
             appearance={{
