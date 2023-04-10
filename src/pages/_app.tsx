@@ -8,17 +8,18 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { MantineProvider } from '@mantine/core';
+import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from '@clerk/themes';
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
-
+  const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
   return (
-    <>
-      <Head>  
-        <title>mini list</title>
+    <ClerkProvider appearance={{ baseTheme: dark }} publishableKey={clerkPubKey} {...pageProps}>
+      <Head>
+        <title>minizou list</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
-
       <MantineProvider
         withGlobalStyles
         withNormalizeCSS
@@ -33,6 +34,6 @@ export default function App(props: AppProps) {
       >
         <Component {...pageProps} />
       </MantineProvider>
-    </>
+    </ClerkProvider>
   );
 }

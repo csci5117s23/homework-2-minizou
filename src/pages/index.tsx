@@ -1,5 +1,8 @@
 import { createStyles, Container, Text, Button, Group, rem } from '@mantine/core';
 import { GithubIcon } from '@mantine/ds';
+import { useAuth, SignInButton} from '@clerk/nextjs';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 const NUM_CATS = 0;
 
@@ -65,7 +68,14 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function Home() {
+  const router = useRouter();
   const { classes } = useStyles();
+  const { isLoaded, userId, sessionId, getToken } = useAuth();
+
+  if (userId) {
+    // FIXME: I have no idea what makes this different from Router.push('/todos/') 
+    router.push('/todos/');
+  }
 
   return (
     <div className={classes.wrapper}>
@@ -83,12 +93,14 @@ export default function Home() {
         </Text>
 
         <Group className={classes.controls}>
-          <Button
-            size="xl"
-            className={classes.control}
-          >
-            Login
-          </Button>
+          <Link href="/todos/">
+            <Button
+              size="xl"
+              className={classes.control}
+            >
+              Login
+            </Button>
+          </Link>
 
           <Button
             component="a"
