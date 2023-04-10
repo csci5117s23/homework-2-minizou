@@ -1,5 +1,16 @@
+import { SignedIn, SignedOut } from "@clerk/nextjs";
+import SignInPage from "./signin";
+import { HeaderSimple } from "@/components/header";
+
 export default function Done() {
   return (
-    <p>done</p>
+    <>
+      <SignedIn>
+        <HeaderSimple />
+      </SignedIn>
+      <SignedOut>
+        <SignInPage />
+      </SignedOut>
+    </>
   )
 }
