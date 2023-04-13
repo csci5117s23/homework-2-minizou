@@ -1,5 +1,8 @@
-import { TextInput, TextInputProps, ActionIcon, useMantineTheme, Button, Flex, Container, createStyles } from '@mantine/core';
+import { TodoInterface } from '@/pages/todos';
+import { useAuth } from '@clerk/nextjs';
+import { TextInput, Button, Flex, createStyles } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
+import { useState } from 'react';
 
 const useStyles = createStyles((theme) => ({
   input: {
@@ -8,17 +11,54 @@ const useStyles = createStyles((theme) => ({
   }
 }));
 
-export default function Input(props: TextInputProps) {
-  const { classes, cx } = useStyles();
-  const theme = useMantineTheme();
+// FIXME: idk why typescript wanted me to define this
+type InputProps = {
+  addTodo: (todo: TodoInterface) => void;
+}
 
+export default function Input({ addTodo }: InputProps) {
+  const [content, setContent] = useState("");
+  const { userId, getToken } = useAuth();
+
+  function submitTodo(event: any) {
+    event.preventDefault();
+    async function fetchData() {
+      if (content == '') {
+        console.log("Content is EMPTY: TODO not added.");
+        return;
+      }
+      const newTodo = {
+        "content": content,
+        "userId": userId,
+        "done": false,
+        "date": new Date(),
+      };
+      setContent('');
+      
+      // create a new todo item
+      const token = await getToken({ template: "codehooks" });
+      const res = await fetch(process.env.NEXT_PUBLIC_API + "/todo/", {
+        method: "POST",
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newTodo)
+      });
+      addTodo(newTodo);
+    }
+    fetchData();
+  }
+
+  const {classes} = useStyles();
   return (
-      <Flex>
-        <TextInput className={classes.input}
-          placeholder="Finish CSCI 5451 Assignment 3"
-          {...props} /><Button leftIcon={<IconPlus />}>
-          Add
-        </Button>
-      </Flex>
+    <Flex>
+      <TextInput onChange={(event) => setContent(event.target.value)} className={classes.input}
+        placeholder={content}
+      />
+      <Button onClick={submitTodo} leftIcon={<IconPlus />}>
+        Add
+      </Button>
+    </Flex>
   );
 }

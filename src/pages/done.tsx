@@ -1,16 +1,59 @@
-import { SignedIn, SignedOut } from "@clerk/nextjs";
-import SignInPage from "./signin";
-import HeaderCustom from "@/components/header";
+import { useAuth } from '@clerk/nextjs';
+import HeaderCustom from '../components/header';
+import { Container, Title, createStyles, Text } from '@mantine/core';
+import Signin from './signin';
+import { useState } from 'react';
+import List from '@/components/list';
 
-export default function Done() {
-  return (
-    <>
-      <SignedIn>
-        <HeaderCustom />
-      </SignedIn>
-      <SignedOut>
-        <SignInPage />
-      </SignedOut>
-    </>
-  )
+const useStyles = createStyles((theme) => ({
+  header: {
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+  },
+  heading: {
+    marginBottom: '2em',
+    paddingLeft: '0',
+    paddingRight: '0',
+  }
+}));
+
+export interface TodoInterface {
+  userId: string | null | undefined;
+  content: string;
+  done: boolean;
+}
+
+export default function Done(isDonePage = false) {
+  const { isLoaded, userId, sessionId, getToken } = useAuth();
+  const [todos, setTodos] = useState<TodoInterface[]>([]);
+  const { classes } = useStyles();
+
+  if (!isLoaded || !userId) {
+    return <Signin/>;
+  }
+
+  console.log(todos.length);
+
+  // FIXME: refactor into list or smth since this is redundant
+  return (<>
+    <HeaderCustom />
+    <Container className={classes.header}>
+      <Container className={classes.heading}>
+        <Title 
+          display="flex"
+          align="center"
+          variant="gradient"
+          gradient={{ from: 'red', to: 'yellow', deg: 45 }}>
+          wow, you have {todos.length} task{todos.length == 1 ? "" : "s"} that {todos.length == 1 ? "is " : "are "}
+          done
+        </Title>
+        <Text>(this is supposed to be the done page if you can't tell)</Text>
+      </Container>
+      <List
+        updatedTodos={todos}
+        isDone={true}
+      />
+    </Container>
+  </>)
 }

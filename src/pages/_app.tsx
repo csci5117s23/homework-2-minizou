@@ -14,6 +14,7 @@ import { dark } from '@clerk/themes';
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
   const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
   return (
     <ClerkProvider appearance={{ baseTheme: dark }} publishableKey={clerkPubKey} {...pageProps}>
       <Head>

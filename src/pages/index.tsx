@@ -1,10 +1,7 @@
-import { createStyles, Container, Text, Button, Group, rem } from '@mantine/core';
+import { createStyles, Container, Text, Button, Group, Image, rem } from '@mantine/core';
 import { GithubIcon } from '@mantine/ds';
-import { useAuth, SignInButton} from '@clerk/nextjs';
+import { useAuth } from '@clerk/nextjs';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
-
-const NUM_CATS = 0;
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -65,18 +62,24 @@ const useStyles = createStyles((theme) => ({
       flex: 1,
     },
   },
+
+  bunny: {
+    position: 'fixed',
+    right: rem(80),
+    bottom: rem(-100)
+  }
 }));
 
 export default function Home() {
   const router = useRouter();
-  const { classes } = useStyles();
   const { isLoaded, userId, sessionId, getToken } = useAuth();
 
-  if (userId) {
+  if (isLoaded || userId) {
     // FIXME: I have no idea what makes this different from Router.push('/todos/') 
     router.push('/todos/');
   }
 
+  const { classes } = useStyles();
   return (
     <div className={classes.wrapper}>
       <Container size={700} className={classes.inner}>
@@ -89,22 +92,21 @@ export default function Home() {
         </h1>
 
         <Text className={classes.description} color="dimmed">
-          There are currently {NUM_CATS} meows hidden on the website.
+          Alternatively: spot how many rabbits I can fit into this app.
         </Text>
 
         <Group className={classes.controls}>
-          <Link href="/todos/">
             <Button
+              onClick={() => {router.push("/signin")}}
               size="xl"
               className={classes.control}
             >
               Login
             </Button>
-          </Link>
 
           <Button
             component="a"
-            href="https://github.com/mantinedev/mantine"
+            href="https://github.com/csci5117s23/homework-2-minizou"
             size="xl"
             variant="default"
             className={classes.control}
@@ -114,6 +116,7 @@ export default function Home() {
           </Button>
         </Group>
       </Container>
+      <Image width={400} src="./bunny.png" alt="bunny" className={classes.bunny} />
     </div>
   );
 }

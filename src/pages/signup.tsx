@@ -1,10 +1,10 @@
-import { SignIn } from "@clerk/nextjs";
+import { SignUp } from "@clerk/nextjs";
 import { Center } from '@mantine/core';
 
-const SignInPage = () => (
+const SignUpPage = () => (
   <Center maw={400} h={700} mx="auto">
-    <SignIn 
-      signUpUrl="/signup" redirectUrl="/todos"
+    <SignUp 
+      signInUrl="/signin" redirectUrl="/todos"
       appearance={{
         layout: {
           socialButtonsPlacement: 'bottom',
@@ -17,4 +17,4 @@ const SignInPage = () => (
     />
   </Center>
 );
-export default SignInPage;
+export default SignUpPage;

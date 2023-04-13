@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { createStyles, Header, Container, Group, Burger, rem, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { UserButton, useAuth, useUser } from '@clerk/nextjs';
+import { SignIn, SignOutButton, UserButton, useAuth, useUser } from '@clerk/nextjs';
 import {
   IconHome2,
   IconChecklist
 } from '@tabler/icons-react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 const useStyles = createStyles((theme) => ({
@@ -15,19 +16,16 @@ const useStyles = createStyles((theme) => ({
     alignItems: 'center',
     height: '100%',
   },
-
   links: {
     [theme.fn.smallerThan('xs')]: {
       display: 'none',
     },
   },
-
   burger: {
     [theme.fn.largerThan('xs')]: {
       display: 'none',
     },
   },
-
   link: {
     display: 'block',
     lineHeight: 1,
@@ -51,11 +49,8 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-interface HeaderSimpleProps {
-  links: { link: string; label: string, icon: React.FC<any> }[];
-}
-
 export default function HeaderCustom() {
+  const router = useRouter();
   const links = [
     {
       "link": "/todos",
@@ -69,10 +64,9 @@ export default function HeaderCustom() {
     },
   ];
 
-  const { userId, sessionId, getToken } = useAuth();
   const { isLoaded, isSignedIn, user } = useUser();
   const [opened, { toggle }] = useDisclosure(false);
-  const [active, setActive] = useState(links[0].link);
+  const [active, setActive] = useState();
   const { classes, cx } = useStyles();
 
   const items = links.map((link) => (
@@ -82,7 +76,8 @@ export default function HeaderCustom() {
       className={cx(classes.link, { [classes.linkActive]: active === link.link })}
       onClick={(event) => {
         event.preventDefault();
-        setActive(link.link);
+        // setActive(link.link);
+        router.push(link.link);
       }}
     >
       <Tooltip label={link.label} position="bottom" color="dark" transitionProps={{ duration: 0 }}>
@@ -91,28 +86,24 @@ export default function HeaderCustom() {
     </Link>
   ));
 
-  if (!isLoaded || !isSignedIn) {
-    return null;
-  } else {
-    return (
-      <Header height={60} mb={40}>
-        <Container className={classes.header}>
-          <UserButton
-            appearance={{
-              variables: {
-                colorPrimary: '#F4B32D',
-                colorBackground: '#2B2C2F',
-              }
-            }}
-            afterSignOutUrl="/" />
-          welcome, {user.firstName?.toLowerCase()}!
-          <Group spacing={5} className={classes.links}>
-            {items}
-          </Group>
-
-          <Burger opened={opened} onClick={toggle} className={classes.burger} size="sm" />
-        </Container>
-      </Header>
-    );
-  }
+  return (
+    <Header height={60} mb={40}>
+      <Container className={classes.header}>
+        <UserButton
+          appearance={{
+            variables: {
+              colorPrimary: '#F4B32D',
+              colorBackground: '#2B2C2F',
+            }
+          }}
+          afterSignOutUrl="/"
+        />
+        welcome, {user ? user.firstName?.toLowerCase() : "stranger"}!
+        <Group spacing={5} className={classes.links}>
+          {items}
+        </Group>
+        <Burger opened={opened} onClick={toggle} className={classes.burger} size="sm" />
+      </Container>
+    </Header>
+  );
 }
