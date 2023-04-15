@@ -33,7 +33,7 @@ export default function Todo() {
   const [newContent, setNewContent] = useState('');
   const [errorMsg, setErrorMsg] = useState("");
   const [editable, setEditable] = useState(false);
-  const [isDone, setIsDone] = useState();
+  const [isDone, setIsDone] = useState<any>();
   const [todo, setTodo] = useState<any>();
   const router = useRouter();
   const _id = router.query.id;
