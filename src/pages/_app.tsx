@@ -10,11 +10,15 @@ import Head from 'next/head';
 import { MantineProvider } from '@mantine/core';
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from '@clerk/themes';
+import HeaderCustom from '@/components/header';
+import { useRouter } from 'next/router';
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
   const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  const router = useRouter();
 
+  const showHeader = router.pathname !== "/";
   return (
     <ClerkProvider appearance={{ baseTheme: dark }} publishableKey={clerkPubKey} {...pageProps}>
       <Head>
@@ -28,11 +32,11 @@ export default function App(props: AppProps) {
           colors: {
             brand: ['#BEEDCE', '#72B6A8', '#8FB99E', '#82AA93', '#769C87', '#6A8D7C', '#5E7E70', '#516F64', '#456059', '#39524D'],
           },
-          /** Put your mantine theme override here */
           primaryColor: 'brand',
           colorScheme: 'dark',
         }}
       >
+        {showHeader && <HeaderCustom />}
         <Component {...pageProps} />
       </MantineProvider>
     </ClerkProvider>

@@ -74,8 +74,9 @@ export default function Home() {
   const router = useRouter();
   const { isLoaded, userId, sessionId, getToken } = useAuth();
 
-  if (isLoaded || userId) {
+  if (userId) {
     // FIXME: I have no idea what makes this different from Router.push('/todos/') 
+    console.log(userId)
     router.push('/todos/');
   }
 

@@ -15,6 +15,9 @@ const useStyles = createStyles((theme) => ({
     marginBottom: '2em',
     paddingLeft: '0',
     paddingRight: '0',
+  },
+  title: {
+    marginBottom: '0.25em',
   }
 }));
 
@@ -37,18 +40,17 @@ export default function Done(isDonePage = false) {
 
   // FIXME: refactor into list or smth since this is redundant
   return (<>
-    <HeaderCustom />
     <Container className={classes.header}>
       <Container className={classes.heading}>
         <Title 
           display="flex"
           align="center"
           variant="gradient"
-          gradient={{ from: 'red', to: 'yellow', deg: 45 }}>
-          wow, you have {todos.length} task{todos.length == 1 ? "" : "s"} that {todos.length == 1 ? "is " : "are "}
-          done
+          gradient={{ from: 'cyan', to: 'yellow', deg: 45 }}
+          className={classes.title}>
+          Wow, look at all those DONE tasks
         </Title>
-        <Text>(this is supposed to be the done page if you can't tell)</Text>
+        <Text>🐇🐇🐇 im so proud of you</Text>
       </Container>
       <List
         updatedTodos={todos}

@@ -35,7 +35,7 @@ export default function List(props : {isDone : boolean, updatedTodos : any}) {
   
   return (
     <div>
-      {todos != null ?
+      {(todos != null) ?
         todos.map((todo : any) => {
           return (
             <TodoItem

@@ -17,6 +17,9 @@ const useStyles = createStyles((theme) => ({
     marginBottom: '2em',
     paddingLeft: '0',
     paddingRight: '0',
+  },
+  title: {
+    marginBottom: '0.25em',
   }
 }));
 
@@ -40,18 +43,17 @@ export default function Todos() {
   }
 
   return (<>
-    <HeaderCustom />
     <Container className={classes.header}>
       <Container className={classes.heading}>
         <Title 
           display="flex"
           align="center"
           variant="gradient"
-          gradient={{ from: 'red', to: 'yellow', deg: 45 }}>
-          wow, you have {todos.length} task{todos.length == 1 ? "" : "s"} that {todos.length == 1 ? "is " : "are "}
-          not done
+          gradient={{ from: 'red', to: 'yellow', deg: 45 }}
+          className={classes.title}>
+          Look at all those TODOs!!!
         </Title>
-        <Text>(this is supposed to be the not done page if you can't tell)</Text>
+        <Text>🐇🐇🐇 better get working on them </Text>
       </Container>
       <Input 
         addTodo={addTodo}
